@@ -79,3 +79,7 @@ export const logoutController = async (req,res)=>{
     res.clearCookie("refreshToken");
     return res.status(200).json({msg:"logut successfull"})
 }
+
+export const profileController =async (req,res)=>{
+    return res.json("dashboard");
+}

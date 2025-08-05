@@ -9,3 +9,7 @@ export const generateRefreshToken = (user)=>{
     const token = jwt.sign({username:user.username} , "abc" , {expiresIn:"7days"})
     return token;
 }
+
+export const authenticationToken = (req,res,next)=>{
+
+}
