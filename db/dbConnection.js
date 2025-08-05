@@ -1,17 +1,5 @@
 import {Sequelize} from 'sequelize';
-import createUserModel from '../models/userModel.js';
-export const connectDb = async (database , username , password)=>{
-       const sequelize = new Sequelize(database, username, password, {
+  export const sequelize = new Sequelize("auth1" , "postgres", "123" ,{
   host: 'localhost',
   dialect: 'postgres'
 });
-try {
-  await sequelize.authenticate();
-  await createUserModel(sequelize);
-  await sequelize.sync({alter:true});
-  console.log('Connection has been established successfully.');
-} catch (error) {
-  console.error('Unable to connect to the database:', error);
-}
-
-}
