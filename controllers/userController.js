@@ -20,6 +20,8 @@ export const loginController = async(req,res)=>{
     const {username,email,password} = req.body;
     const existUser = await user.findOne({where:{username:username}});
     console.log(existUser);
+    const accessToken = generateAccessToken(existUser.dataValues);
+        const refreshToken = generateRefreshToken(existUser.dataValues);
     if(!existUser){
         return res.status(400).json({msg:"username incorrect"});
     }else{
@@ -27,7 +29,14 @@ export const loginController = async(req,res)=>{
         if(!checkPass){
             return res.status(500).json({msg:"Credentials invalid"})
        }
-        res.status(200).json();
+       await existUser.update({refreshToken:refreshToken})
+       res.cookie("refreshToken", refreshToken , {httpOnly:true , secure:true});
+        res.status(200).json({msg:"user logged in" 
+            , userData:{ 
+                username:existUser.dataValues.username , 
+                refreshToken:refreshToken,
+                accessToken:accessToken}
+            });
     }
 
 }
