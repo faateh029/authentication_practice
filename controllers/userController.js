@@ -61,6 +61,21 @@ export const refreshController = async (req,res)=>{
               return res.status(200).json({accessToken});
         })
         
-    } 
+    }
     
 
+    
+
+export const logoutController = async (req,res)=>{
+    const refreshToken = req.cookies.refreshToken;
+    if(!refreshToken){
+        return res.status(403).json({msg:"Token not found"})
+    }
+    const tokenUser = await user.findOne({refreshToken:refreshToken});
+    if(!tokenUser){
+        return res.status(404).json({msg:"user not found"})
+    }
+    tokenUser.update({refreshToken:null});
+    res.clearCookie("refreshToken");
+    return res.status(200).json({msg:"logut successfull"})
+}
