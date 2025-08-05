@@ -1,4 +1,4 @@
-//import {user} from '../db/dbConnection.js'
+import jwt from 'jsonwebtoken';
 import {user} from '../models/userModel.js'
 import { generateAccessToken, generateRefreshToken } from './auth/auth.js';
 import bcryptjs from 'bcryptjs';
@@ -40,3 +40,27 @@ export const loginController = async(req,res)=>{
     }
 
 }
+
+
+export const refreshController = async (req,res)=>{
+    const refreshToken = req.cookies.refreshToken;
+    if(!refreshToken){
+        return res.status(403).json({msg:"Token not provided"});
+    }
+    
+    
+        const retUser = await user.findOne({refreshToken:refreshToken});
+    if(!retUser){
+        return res.status(404).json({msg:"user with this token not found"});
+    }
+        jwt.verify(refreshToken , "abc" , async (error, decoded)=>{
+              if(error){
+                return res.status(403).json({msg:"invalid token"});
+              }
+              const accessToken = await generateAccessToken(retUser.dataValues);
+              return res.status(200).json({accessToken});
+        })
+        
+    } 
+    
+

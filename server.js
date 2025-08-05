@@ -1,10 +1,13 @@
 import express from 'express';
 import {sequelize} from './db/dbConnection.js';
 import {router} from './routes/route.js'
+import cookieParser from 'cookie-parser';
 const PORT = process.env.PORT||8081;
 const server = express();
 server.use(express.json());
+server.use(cookieParser());
 server.use('/api', router)
+
 try {
   await sequelize.authenticate(); 
   // user = await createUserModel(sequelize);
