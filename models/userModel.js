@@ -22,6 +22,10 @@ export class user extends Model{};
         password: {
             type: DataTypes.STRING,
             allowNull: false      // Fixed: was "allownull"
+        },
+        refreshToken: {
+            type: DataTypes.STRING,  // Fixed: should be STRING, not INTEGER
+            allowNull: true          // Fixed: was "allownull"
         }
     }, { 
         sequelize,

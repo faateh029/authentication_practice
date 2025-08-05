@@ -1,5 +1,6 @@
 //import {user} from '../db/dbConnection.js'
 import {user} from '../models/userModel.js'
+import { generateAccessToken, generateRefreshToken } from './auth/auth.js';
 import bcryptjs from 'bcryptjs';
 export const registerController = async (req,res)=>{
     const {username , email , password} = req.body;
@@ -18,13 +19,14 @@ export const registerController = async (req,res)=>{
 export const loginController = async(req,res)=>{
     const {username,email,password} = req.body;
     const existUser = await user.findOne({where:{username:username}});
+    console.log(existUser);
     if(!existUser){
         return res.status(400).json({msg:"username incorrect"});
     }else{
         const checkPass = await bcryptjs.compare(password, existUser.password);
         if(!checkPass){
             return res.status(500).json({msg:"Credentials invalid"})
-        }
+       }
         res.status(200).json();
     }
 
