@@ -15,3 +15,17 @@ export const registerController = async (req,res)=>{
     })
      res.status(201).json(returnedUser);
 }
+export const loginController = async(req,res)=>{
+    const {username,email,password} = req.body;
+    const existUser = await user.findOne({where:{username:username}});
+    if(!existUser){
+        return res.status(400).json({msg:"username incorrect"});
+    }else{
+        const checkPass = await bcryptjs.compare(password, existUser.password);
+        if(!checkPass){
+            return res.status(500).json({msg:"Credentials invalid"})
+        }
+        res.status(200).json();
+    }
+
+}
